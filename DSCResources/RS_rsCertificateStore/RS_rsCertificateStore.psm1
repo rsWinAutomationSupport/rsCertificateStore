@@ -68,7 +68,10 @@ function Set-TargetResource
         [parameter()]
         [ValidateSet('Present','Absent')]
         [string]
-        $Ensure = 'Present'
+        $Ensure = 'Present',
+        [parameter()]        
+        [string]
+        $Password
     )
 
     $CertificateBaseLocation = "cert:\$Location\$Store"
@@ -76,7 +79,7 @@ function Set-TargetResource
     if ($Ensure -like 'Present')
     {        
         Write-Verbose "Adding $path to $CertificateBaseLocation."
-        Import-PfxCertificate -CertStoreLocation $CertificateBaseLocation -FilePath $Path 
+        Import-PfxCertificate -CertStoreLocation $CertificateBaseLocation -FilePath $Path -Password $Password
     }
     else
     {

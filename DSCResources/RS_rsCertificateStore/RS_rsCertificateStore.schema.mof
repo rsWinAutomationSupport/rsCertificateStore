@@ -5,6 +5,7 @@ class RS_rsCertificateStore : OMI_BaseResource
 [Key] string Path;
 [write,ValueMap{"LocalMachine", "CurrentUser"},Values{"LocalMachine", "CurrentUser"}] string Location;
 [write] string Store;
+[write] string Password;
 [write,ValueMap{"Present", "Absent"},Values{"Present", "Absent"}] string Ensure;
 };
 

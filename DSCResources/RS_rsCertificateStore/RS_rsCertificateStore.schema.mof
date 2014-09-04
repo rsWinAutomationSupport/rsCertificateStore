@@ -8,5 +8,3 @@ class RS_rsCertificateStore : OMI_BaseResource
 [write] string Password;
 [write,ValueMap{"Present", "Absent"},Values{"Present", "Absent"}] string Ensure;
 };
-
-

@@ -1,3 +1,4 @@
+
 function Get-TargetResource
 {
     [OutputType([Hashtable])]
@@ -78,8 +79,9 @@ function Set-TargetResource
     
     if ($Ensure -like 'Present')
     {        
+	$SecurePassword = ConvertTo-SecureString -string $Password -AsPlainText -Force
         Write-Verbose "Adding $path to $CertificateBaseLocation."
-        Import-PfxCertificate -CertStoreLocation $CertificateBaseLocation -FilePath $Path -Password $Password
+        Import-PfxCertificate -CertStoreLocation $CertificateBaseLocation -FilePath $Path -Password $SecurePassword
     }
     else
     {
@@ -111,7 +113,10 @@ function Test-TargetResource
         [parameter()]
         [ValidateSet('Present','Absent')]
         [string]
-        $Ensure = 'Present'
+        $Ensure = 'Present',
+	[parameter()]        
+        [string]
+        $Password
     )
 
     $IsValid = $false

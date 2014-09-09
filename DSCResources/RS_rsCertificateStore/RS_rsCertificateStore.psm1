@@ -68,15 +68,19 @@ function Set-TargetResource
         [parameter()]
         [ValidateSet('Present','Absent')]
         [string]
-        $Ensure = 'Present'
+        $Ensure = 'Present',
+        [parameter()]        
+        [string]
+        $Password
     )
 
     $CertificateBaseLocation = "cert:\$Location\$Store"
     
     if ($Ensure -like 'Present')
     {        
+	$SecurePassword = ConvertTo-SecureString -string $Password -AsPlainText -Force
         Write-Verbose "Adding $path to $CertificateBaseLocation."
-        Import-PfxCertificate -CertStoreLocation $CertificateBaseLocation -FilePath $Path 
+        Import-PfxCertificate -CertStoreLocation $CertificateBaseLocation -FilePath $Path -Password $SecurePassword
     }
     else
     {
@@ -108,7 +112,10 @@ function Test-TargetResource
         [parameter()]
         [ValidateSet('Present','Absent')]
         [string]
-        $Ensure = 'Present'
+        $Ensure = 'Present',
+	[parameter()]        
+        [string]
+        $Password
     )
 
     $IsValid = $false

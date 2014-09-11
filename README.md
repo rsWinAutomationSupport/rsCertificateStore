@@ -1,6 +1,6 @@
 rsSSL
 =====
-
+<pre>
 rsCertificateStore cert_1
 {
   Ensure = "Present"
@@ -10,3 +10,4 @@ rsCertificateStore cert_1
   Store = "WebHosting"
   Password = "rack"
 }
+</pre>

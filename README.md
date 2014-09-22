@@ -1,11 +1,9 @@
 rsSSL
 =====
-<pre>
 Originated at: https://github.com/PowerShellOrg/DSC/tree/master/Resources/StackExchangeResources/DSCResources/StackExchange_CertificateStore
 
 Used for SSL installation. PFX password support added by RS.
-</pre>
-<pre>
+```PoSh
 rsCertificateStore cert_1
 {
   Ensure = "Present"
@@ -15,4 +13,4 @@ rsCertificateStore cert_1
   Store = "WebHosting"
   Password = "rack"
 }
-</pre>
+```

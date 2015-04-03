@@ -72,7 +72,7 @@ function Set-TargetResource
             $CertificatePath = (Get-childitem -Path $CertificateBaseLocation | ? thumbprint -eq $thumbprint).PSPath
         elseif ([bool](Get-childitem -Path $CertificateBaseLocation | ? thumbprint -eq $Name))
         {
-            $CertificatePath = (Get-childitem -Path $CertificateBaseLocation | ? thumbprint -eq $thumbprint).PSPath
+            $CertificatePath = (Get-childitem -Path $CertificateBaseLocation | ? thumbprint -eq $Name).PSPath
         }else{
             $CertificatePath = Join-path $CertificateBaseLocation $Name
         }

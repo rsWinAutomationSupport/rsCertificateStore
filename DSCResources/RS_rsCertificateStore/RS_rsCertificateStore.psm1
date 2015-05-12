@@ -101,6 +101,7 @@ function Set-TargetResource
             Write-Verbose "Removing Certificate $Name."
             dir $CertificatePath | Remove-Item -Force -Confirm:$false
         }
+    }
 }
 
 function Test-TargetResource
@@ -161,7 +162,7 @@ function Test-TargetResource
         elseif ($Ensure -eq "Present")
         {
             Write-Verbose "Ensure is Present, but the filepath test is bad. Unable to grab Certificate thumbprint./nUsing $Name."
-            if ([bool](Get-childitem -Path $CertificateBaseLocation | Where-object thumbprint -eq $Name){$IsValid = $true}
+            if ([bool](Get-childitem -Path $CertificateBaseLocation | Where-object thumbprint -eq $Name)){$IsValid = $true}
             else{$falsecount ++}
         }
         elseif (($Ensure -eq 'Absent') -and ($pathGood))
@@ -190,7 +191,7 @@ function Test-TargetResource
         }
     }
     #Needs to return a boolean  
-    if(($falsecount -eq 0) -and $IsValid = $true){ Return $true }
+    if(($falsecount -eq 0) -and ($IsValid -eq $true)){ Return $true }
     else{ return $false }
 }
 
@@ -202,7 +203,7 @@ function Get-Thumbprint
     [pscredential]$SecurePassword
     )
     if(-not $PSboundparameters.SecurePassword){$pass = $null}
-	else{$pass = $SecurePassword.Password}
+    else{$pass = $SecurePassword.Password}
 
     $certificate = New-Object System.Security.Cryptography.X509Certificates.X509Certificate2
     $certificate.Import($Path, $pass, [System.Security.Cryptography.X509Certificates.X509KeyStorageFlags]::DefaultKeySet)

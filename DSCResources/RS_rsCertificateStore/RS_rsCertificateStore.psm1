@@ -61,19 +61,30 @@ function Set-TargetResource
 
     if($PSBoundparameters.Password)
     {
-        $SecurePassword = ConvertTo-SecureString -string $Password -AsPlainText -Force
+        $SecurePassword = New-Object System.Management.Automation.PSCredential("blank",(ConvertTo-SecureString -string $Password -AsPlainText -Force))
     }
     if(-not $SecurePassword)
-    {$noenc = $true}
+    {
+        $noenc = $true
+        $SecurePassword = $null
+    }
+    if(Test-Path $Path)
+    {
+        if($noenc -eq $true){
+            $thumbprint = Get-Thumbprint -Path $Path
+        }else{
+            $thumbprint = Get-Thumbprint -Path $Path -SecurePassword $SecurePassword
+        }
+    }
     foreach ($Store in $($PSBoundparameters.Store))
     {
         $CertificateBaseLocation = "cert:\$Location\$Store"
         if ($Ensure -like 'Present')
         {
             Write-Verbose "Importing $path to $CertificateBaseLocation."
-            if($noenc){Import-Certificate -CertStoreLocation $CertificateBaseLocation -FilePath $Path
+            if($noenc -and (-not ($Path -match ".pfx"))){Import-Certificate -CertStoreLocation $CertificateBaseLocation -FilePath $Path
             }else{
-            Import-PfxCertificate -CertStoreLocation $CertificateBaseLocation -FilePath $Path -Password $SecurePassword
+            Import-PfxCertificate -CertStoreLocation $CertificateBaseLocation -FilePath $Path -Password $SecurePassword.Password
             }
         }
         else
@@ -115,7 +126,7 @@ function Test-TargetResource
     $falsecount = 0
     if($PSBoundparameters.Password)
     {
-        $SecurePassword = ConvertTo-SecureString -string $Password -AsPlainText -Force
+        $SecurePassword = New-Object System.Management.Automation.PSCredential("blank",(ConvertTo-SecureString -string $Password -AsPlainText -Force))
     }
     if(Test-Path $Path)
     {
@@ -190,9 +201,11 @@ function Get-Thumbprint
     [string]$Path,
     [pscredential]$SecurePassword
     )
-    if(-not $PSboundparameters.SecurePassword){$SecurePassword = $null}
+    if(-not $PSboundparameters.SecurePassword){$pass = $null}
+	else{$pass = $SecurePassword.Password}
+
     $certificate = New-Object System.Security.Cryptography.X509Certificates.X509Certificate2
-    $certificate.Import($Path, $SecurePassword, [System.Security.Cryptography.X509Certificates.X509KeyStorageFlags]::DefaultKeySet)
+    $certificate.Import($Path, $pass, [System.Security.Cryptography.X509Certificates.X509KeyStorageFlags]::DefaultKeySet)
     Return $certificate.thumbprint
 }
 

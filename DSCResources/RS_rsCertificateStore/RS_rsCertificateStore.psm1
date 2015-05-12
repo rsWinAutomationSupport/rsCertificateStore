@@ -202,7 +202,7 @@ function Get-Thumbprint
     [pscredential]$SecurePassword
     )
     if(-not $PSboundparameters.SecurePassword){$pass = $null}
-	else{$pass = $SecurePassword.Password}
+    else{$pass = $SecurePassword.Password}
 
     $certificate = New-Object System.Security.Cryptography.X509Certificates.X509Certificate2
     $certificate.Import($Path, $pass, [System.Security.Cryptography.X509Certificates.X509KeyStorageFlags]::DefaultKeySet)
